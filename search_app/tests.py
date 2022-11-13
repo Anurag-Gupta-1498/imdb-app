@@ -24,6 +24,7 @@ class TestApp(TestCase):
         self.user = Users.objects.create_user(username='Anurag1', password='Anurag@123', admin=True)
         self.user2 = Users.objects.create_user(username='Anurag2', password='Anurag@123', admin=False)
         self.request_factory = APIRequestFactory()
+        self.movie_url_get = reverse("get_movie", kwargs={'pk': 1})
         self.movies_url_create = reverse("movies_create")
         self.movies_url_delete = reverse("movies_delete", kwargs={'pk': 1})
         self.movies_url_update = reverse("movies_update", kwargs={'pk': 248})
@@ -66,6 +67,15 @@ class TestApp(TestCase):
 
         assert response.status_code == status.HTTP_201_CREATED
 
+    def test_get_movie(self):
+        """
+        To test get movies api
+        """
+        request = self.request_factory.get(self.movie_url_get, verify=False)
+        force_authenticate(request, user=self.user)
+        response = self.cud_view(request, pk=1)
+
+        assert response.status_code == status.HTTP_200_OK
 
     def test_create_movies_non_admin_user(self):
         """

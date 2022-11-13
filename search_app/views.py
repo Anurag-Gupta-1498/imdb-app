@@ -20,6 +20,11 @@ from django.db.utils import IntegrityError
 @permission_classes([IsAuthenticated, ])
 class MovieCreateDeleteUpdate(APIView):
 
+    def get(self, request, pk=None):
+        movie = get_object_or_404(MovieDetails, id=pk)
+        movie_serializers = MovieSerializer(instance=movie)
+        return Response(movie_serializers.data, status=status.HTTP_200_OK)
+
     @method_decorator(admin_user_required)
     def post(self, request):
         try:
@@ -57,7 +62,6 @@ class SearchAPI(APIView):
     def get(request):
         try:
             page = request.GET.get('page', 1)
-
             search_name = request.GET.get('search_name', '')
             search_director = request.GET.get('search_director', '')
             search_rating = request.GET.get('search_rating', '')
@@ -96,7 +100,7 @@ class SearchAPI(APIView):
                     return Response({'message': 'No data exists for this Genre'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
-            if paginator_req.lower() == 'no':
+            if paginator_req.lower() == 'yes':
                 paginator = Paginator(queryset, paginator_len)
                 try:
                     queryset = paginator.page(page)
