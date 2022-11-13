@@ -128,12 +128,12 @@ data_send = {
 
   - '**paginator_len**' : used to specify the number of movies in a page
   
-  - '**paginator_req**' : used to specify if pagination is required or not (`yes` for required else `no` for not required, default pagination is enabled with 10 movies)
+  - '**paginator_req**' : used to specify if pagination is required or not (`yes` for required else `no` for not required, default pagination is enabled with 10 movies per page)
 
   - '**page**' : add page number while using pagination
 
 
-## Steps for heroku deployment :checkered_flag:
+## Steps for heroku deployment :rocket:
 Use the following commands to deploy on heroku
 
 Login into heroku container using
@@ -155,8 +155,5 @@ Release the new image in the heroku app using
 ```shell
 heroku container:release -a imdb-app-job web
 ```
-
-
-
 
 
