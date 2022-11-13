@@ -1,6 +1,6 @@
 FROM python:3.8.10-slim
 
-ADD req.txt /app/requirements.txt
+ADD requirements.txt /app/requirements.txt
 
 RUN apt-get update -y 
 
