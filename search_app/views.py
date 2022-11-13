@@ -64,7 +64,7 @@ class SearchAPI(APIView):
             search_popularity = request.GET.get('search_popularity', '')
             search_genre = request.GET.get('search_genre', '')
             paginator_len = request.GET.get('paginator_len', 10)
-
+            paginator_req = request.GET.get('paginator_req', 'yes')
             queryset = MovieDetails.objects.all().prefetch_related("genres").order_by('-id')
             if search_name:
                 queryset = queryset.filter(
@@ -96,13 +96,14 @@ class SearchAPI(APIView):
                     return Response({'message': 'No data exists for this Genre'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
-            paginator = Paginator(queryset, paginator_len)
-            try:
-                queryset = paginator.page(page)
-            except PageNotAnInteger:
-                queryset = paginator.page(1)
-            except EmptyPage:
-                queryset = paginator.page(paginator.num_pages)
+            if paginator_req.lower() == 'no':
+                paginator = Paginator(queryset, paginator_len)
+                try:
+                    queryset = paginator.page(page)
+                except PageNotAnInteger:
+                    queryset = paginator.page(1)
+                except EmptyPage:
+                    queryset = paginator.page(paginator.num_pages)
 
             if not queryset:
                 message = 'No Data Found'
