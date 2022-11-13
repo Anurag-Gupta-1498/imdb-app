@@ -38,7 +38,7 @@ create_users()
 ```
 _**Note: Make 2 users with 1 user being admin and 1 without admin**_
 
-## Running the project :checkered_flag:
+## Running the project :running:
 
 Now run the app using command ```python manage.py runserver```
 
@@ -58,7 +58,7 @@ For heroku api testing try the following commands
 
 _**Here you would be able to see different tables of users, movies and genres**_
 
-2. **For testing Create, Update, Delete** (For Read check Search Api testing)
+2. **For testing Create, Update, Delete**
 
 - **Create** :arrow_right: Send a `POST` request in Postman using endpoint `movies_create/`
 
@@ -133,7 +133,7 @@ data_send = {
   - '**page**' : add page number while using pagination
 
 
-## Steps for heroku deployment
+## Steps for heroku deployment :checkered_flag:
 Use the following commands to deploy on heroku
 
 Login into heroku container using
@@ -155,6 +155,8 @@ Release the new image in the heroku app using
 ```shell
 heroku container:release -a imdb-app-job web
 ```
+
+
 
 
 
