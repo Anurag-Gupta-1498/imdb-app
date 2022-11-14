@@ -75,25 +75,29 @@ class SearchAPI(APIView):
             paginator_req = request.GET.get('paginator_req', 'yes')
 
             try:
-                page = int(page)
+                if page != 1:
+                    page = int(page)
             except ValueError as e:
                 return Response({'message': "Please enter valid number for page"},
                                 status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             try:
-                search_rating = int(search_rating)
+                if search_rating:
+                    search_rating = int(search_rating)
             except ValueError as e:
                 return Response({'message': "Please enter valid number for movie rating"},
                                 status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             try:
-                search_popularity = int(search_popularity)
+                if search_popularity:
+                    search_popularity = int(search_popularity)
             except ValueError as e:
                 return Response({'message': "Please enter valid number for movie popularity"},
                                 status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             try:
-                paginator_len = int(paginator_len)
+                if paginator_len:
+                    paginator_len = int(paginator_len)
             except ValueError as e:
                 return Response({'message': "Please enter valid number for paginator length"},
                                 status=rest_framework.status.HTTP_400_BAD_REQUEST)
@@ -107,7 +111,7 @@ class SearchAPI(APIView):
                 queryset = queryset.filter(
                     movie_name__icontains=search_name).order_by('-id')
             if search_director:
-                if search_director != '' and queryset.filter(director__iexact=search_director).count() > 0:
+                if queryset.filter(director__iexact=search_director).count() > 0:
                     queryset = queryset.filter(director__iexact=search_director)
                 else:
                     return Response({'message': 'No data exists for this Director'},
@@ -127,7 +131,7 @@ class SearchAPI(APIView):
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             if search_genre:
-                if search_genre != '' and queryset.filter(genres__genre_name__iexact=search_genre).count() > 0:
+                if queryset.filter(genres__genre_name__iexact=search_genre).count() > 0:
                     queryset = queryset.filter(genres__genre_name__iexact=search_genre)
                 else:
                     return Response({'message': 'No data exists for this Genre'},

@@ -14,7 +14,7 @@ Django app for searching movies
 2. Switch to branch master using ```git checkout master```
 
 ### Creating a virtual environment
-1. Create virtual environment using ```python3/python -m venv env```
+1. Create virtual environment using ```python3 -m virtualenv env```
 
 2. Activate virtual env using ```source env/bin/activate (ubuntu)```
 
@@ -24,7 +24,7 @@ Django app for searching movies
 ### Django project setup
 1. Create .env file and :key: ```SECRET_KEY = <YOUR_SECRET_KEY>```
 2. Use python manage.py migrate
-3. Use```python manage.py collectstatic –no-input```
+3. Use```python manage.py collectstatic --noinput```
 4. Create superuser - python manage.py createsuperuser
 5. To load data into database sqlite3, open python manage shell using ```python manage.py shell```and write the following script
 ```python
