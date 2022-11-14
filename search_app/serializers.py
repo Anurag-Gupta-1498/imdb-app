@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import MovieGenre, MovieDetails
 
 
-class GenreSerializer(serializers.ModelSerializer):
+class MovieGenreSerializer(serializers.ModelSerializer):
     """
     Serializer for genre model
     """
@@ -12,11 +12,11 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = ['genre_name']
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class MovieDetailSerializer(serializers.ModelSerializer):
     """
     Serializer for Movie model
     """
-    genres = GenreSerializer(many=True, read_only=True)
+    genres = MovieGenreSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         genres_list = validated_data.pop('data')

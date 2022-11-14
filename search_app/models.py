@@ -15,7 +15,7 @@ def validate_interval_for_popularity(value):
 
 def validate_interval_for_ratings(value):
     """
-        Function to check value for ratings
+    Function to check value for ratings
     """
     if value < 0.0 or value > 10.0:
         raise ValidationError(('%(value)s must be in the range [0.0, 10.0]'), params={'value': value}, )
@@ -36,11 +36,15 @@ class MovieGenre(models.Model):
     Model to store genres of a movie
     """
 
-    genre_name = models.TextField(db_index=True, unique=True)
+    genre_name = models.TextField(unique=True)
 
     def __str__(self):
         return self.genre_name
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['genre_name'])
+        ]
 
 class MovieDetails(models.Model):
     """
@@ -61,4 +65,8 @@ class MovieDetails(models.Model):
             models.UniqueConstraint(
                 fields=['movie_name', 'director'], name='unique_migration_host_combination'
             )
+        ]
+        indexes = [
+            models.Index(fields=['movie_name']),
+            models.Index(fields=['director']),
         ]

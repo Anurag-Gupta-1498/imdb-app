@@ -8,7 +8,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .decorators import admin_user_required
-from .serializers import MovieSerializer
+from .serializers import MovieDetailSerializer
 from .models import MovieDetails
 import rest_framework
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -27,13 +27,13 @@ class MovieCreateDeleteUpdate(APIView):
 
     def get(self, request, pk=None):
         movie = get_object_or_404(MovieDetails, id=pk)
-        movie_serializers = MovieSerializer(instance=movie)
+        movie_serializers = MovieDetailSerializer(instance=movie)
         return Response(movie_serializers.data, status=status.HTTP_200_OK)
 
     @method_decorator(admin_user_required)
     def post(self, request):
         try:
-            movie_serializers = MovieSerializer(data=request.data)
+            movie_serializers = MovieDetailSerializer(data=request.data)
             movie_serializers.is_valid(raise_exception=True)
             movie_serializers.save(data=request.data['genres'])
         except IntegrityError as e:
@@ -43,7 +43,7 @@ class MovieCreateDeleteUpdate(APIView):
     @method_decorator(admin_user_required)
     def put(self, request, pk=None):
         movie = get_object_or_404(MovieDetails, id=pk)
-        movie_serializers = MovieSerializer(instance=movie, data=request.data)
+        movie_serializers = MovieDetailSerializer(instance=movie, data=request.data)
         movie_serializers.is_valid(raise_exception=True)
         movie_serializers.save()
         return Response(movie_serializers.data, status=status.HTTP_200_OK)
@@ -106,7 +106,8 @@ class SearchAPI(APIView):
                 return Response({'message': "Please enter valid option for paginator required - yes/no"},
                                 status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
-            queryset = MovieDetails.objects.all().prefetch_related("genres").order_by('-id')
+            queryset = MovieDetails.objects.all().prefetch_related("genres").order_by('-imdb_rating')
+
             if search_name:
                 queryset = queryset.filter(
                     movie_name__icontains=search_name).order_by('-id')
@@ -151,7 +152,7 @@ class SearchAPI(APIView):
 
             if len(queryset) != 0:
                 return Response(
-                    {'message': 'Received successfully', 'data': list(MovieSerializer(queryset, many=True).data)},
+                    {'message': 'Received successfully', 'data': list(MovieDetailSerializer(queryset, many=True).data)},
                     status=rest_framework.status.HTTP_200_OK)
             else:
                 return Response({'message': 'No data exists for the query'},
