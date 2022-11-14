@@ -36,15 +36,11 @@ class MovieGenre(models.Model):
     Model to store genres of a movie
     """
 
-    genre_name = models.TextField(unique=True)
+    genre_name = models.TextField(unique=True, db_index=True)
 
     def __str__(self):
         return self.genre_name
 
-    class Meta:
-        indexes = [
-            models.Index(fields=['genre_name'])
-        ]
 
 class MovieDetails(models.Model):
     """
@@ -65,8 +61,4 @@ class MovieDetails(models.Model):
             models.UniqueConstraint(
                 fields=['movie_name', 'director'], name='unique_migration_host_combination'
             )
-        ]
-        indexes = [
-            models.Index(fields=['movie_name']),
-            models.Index(fields=['director']),
         ]
