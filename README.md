@@ -54,7 +54,7 @@ For heroku api testing try the following commands
 
 
    Credentials
-   username: "admin" and password: "admin"
+   username: "admin" and password: "Admin@123"
 
 _**Here you would be able to see different tables of users, movies and genres**_
 

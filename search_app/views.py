@@ -13,12 +13,17 @@ from .models import MovieDetails
 import rest_framework
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
+
+
 # Create your views here.
 
 
 @authentication_classes([BasicAuthentication, SessionAuthentication])
 @permission_classes([IsAuthenticated, ])
 class MovieCreateDeleteUpdate(APIView):
+    """
+    Api for crud operations on database
+    """
 
     def get(self, request, pk=None):
         movie = get_object_or_404(MovieDetails, id=pk)
@@ -50,12 +55,11 @@ class MovieCreateDeleteUpdate(APIView):
         return Response({'msg': 'done'}, status=status.HTTP_200_OK)
 
 
-
 @authentication_classes([BasicAuthentication, SessionAuthentication])
 @permission_classes([IsAuthenticated, ])
 class SearchAPI(APIView):
     """
-    Search Based views on basis of REf doc num, agent-wise, circle-wise
+    SEARCH API for filtering movies on basis of movie name, director, rating, etc
     """
 
     @staticmethod
@@ -69,6 +73,35 @@ class SearchAPI(APIView):
             search_genre = request.GET.get('search_genre', '')
             paginator_len = request.GET.get('paginator_len', 10)
             paginator_req = request.GET.get('paginator_req', 'yes')
+
+            try:
+                page = int(page)
+            except ValueError as e:
+                return Response({'message': "Please enter valid number for page"},
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
+
+            try:
+                search_rating = int(search_rating)
+            except ValueError as e:
+                return Response({'message': "Please enter valid number for movie rating"},
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
+
+            try:
+                search_popularity = int(search_popularity)
+            except ValueError as e:
+                return Response({'message': "Please enter valid number for movie popularity"},
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
+
+            try:
+                paginator_len = int(paginator_len)
+            except ValueError as e:
+                return Response({'message': "Please enter valid number for paginator length"},
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
+
+            if paginator_req.lower() not in ('yes', 'no'):
+                return Response({'message': "Please enter valid option for paginator required - yes/no"},
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
+
             queryset = MovieDetails.objects.all().prefetch_related("genres").order_by('-id')
             if search_name:
                 queryset = queryset.filter(
@@ -113,15 +146,17 @@ class SearchAPI(APIView):
                 message = 'No Data Found'
 
             if len(queryset) != 0:
-                return Response({'message': 'Received successfully', 'data': list(MovieSerializer(queryset, many=True).data)},
-                                status=rest_framework.status.HTTP_200_OK)
+                return Response(
+                    {'message': 'Received successfully', 'data': list(MovieSerializer(queryset, many=True).data)},
+                    status=rest_framework.status.HTTP_200_OK)
             else:
                 return Response({'message': 'No data exists for the query'},
-                                    status=rest_framework.status.HTTP_400_BAD_REQUEST)
+                                status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
         except MovieDetails.DoesNotExist as e:
-            message = 'MovieDetails does not exist'
+            message = 'Movie Details does not exist'
             status_code = 404
+
 
         except Exception as e:
             traceback.print_exc()

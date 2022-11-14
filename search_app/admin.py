@@ -1,11 +1,14 @@
 from django.contrib import admin
 from .models import *
+
+
 # Register your models here.
 
 @admin.register(Users)
 class Users(admin.ModelAdmin):
     list_display = ('id', 'username', 'admin')
     search_fields = ('username',)
+
 
 @admin.register(MovieGenre)
 class MovieGenre(admin.ModelAdmin):

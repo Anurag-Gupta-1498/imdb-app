@@ -6,6 +6,7 @@ class GenreSerializer(serializers.ModelSerializer):
     """
     Serializer for genre model
     """
+
     class Meta:
         model = MovieGenre
         fields = ['genre_name']
@@ -30,4 +31,3 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieDetails
         fields = ['movie_name', 'director', 'movie_popularity', 'imdb_rating', 'genres']
-

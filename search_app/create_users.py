@@ -1,8 +1,12 @@
 from search_app.models import Users
 
+
 class NotCorrecTValue(Exception):
-    """Raised when the input value is not correct"""
+    """
+    Raised when the input value is not correct
+    """
     pass
+
 
 def create_users():
     while True:

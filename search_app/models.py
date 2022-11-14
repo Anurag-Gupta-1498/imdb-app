@@ -1,14 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+
+
 # Create your models here.
 
 def validate_interval_for_popularity(value):
+    """
+    Function to check value for popularity
+    """
     if value < 0.0 or value > 100.0:
         raise ValidationError(('%(value)s must be in the range [0.0, 100.0]'), params={'value': value}, )
 
 
 def validate_interval_for_ratings(value):
+    """
+        Function to check value for ratings
+    """
     if value < 0.0 or value > 10.0:
         raise ValidationError(('%(value)s must be in the range [0.0, 10.0]'), params={'value': value}, )
 

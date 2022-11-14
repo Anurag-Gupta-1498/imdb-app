@@ -1,8 +1,8 @@
 from imdbapp.settings import BASE_DIR
 import traceback
-import json
 import os
 from search_app.models import MovieGenre, MovieDetails
+
 
 def load_movies_data():
     try:
@@ -19,7 +19,7 @@ def load_movies_data():
 
             genres_movie = movie_detail["genre"]
             for genre in genres_movie:
-                genre_object, _ =  MovieGenre.objects.get_or_create(genre_name=genre.strip())
+                genre_object, _ = MovieGenre.objects.get_or_create(genre_name=genre.strip())
                 movie_object.genres.add(genre_object)
 
         return "File loaded Successfully"
@@ -30,5 +30,3 @@ def load_movies_data():
     except Exception as e:
         traceback.print_exc()
         return "exception found"
-
-

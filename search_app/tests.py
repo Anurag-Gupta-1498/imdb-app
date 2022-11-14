@@ -10,6 +10,7 @@ from .create_users import create_users
 from .urls import *
 from .load_json import load_movies_data
 
+
 # Create your tests here.
 
 class TestApp(TestCase):
@@ -33,6 +34,7 @@ class TestApp(TestCase):
         self.search_view = SearchAPI.as_view()
         self.movie = MovieDetails.objects.create(movie_name="Spider Man", director="Nolan")
         self.movies = self.test_load_movies()
+
     def test_create_users(self):
         """
         To test create user function
@@ -210,7 +212,6 @@ class TestApp(TestCase):
         json_response = json.loads(response.content)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert json_response['message'] == 'No movies above this popularity exists in the database'
-
 
     def test_check_paginator(self):
         """
