@@ -109,33 +109,33 @@ class SearchAPI(APIView):
             queryset = MovieDetails.objects.prefetch_related("genres").all().order_by('-imdb_rating')
 
             if search_name:
-                queryset = queryset.prefetch_related('genres').filter(
+                queryset = queryset.filter(
                     movie_name__icontains=search_name)
 
             if search_director:
                 if queryset.filter(director__iexact=search_director).count() > 0:
-                    queryset = queryset.prefetch_related('genres').filter(director__iexact=search_director)
+                    queryset = queryset.filter(director__iexact=search_director)
                 else:
                     return Response({'message': 'No data exists for this Director'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             if search_rating:
                 if queryset.filter(imdb_rating__gte=search_rating).count() > 0:
-                    queryset = queryset.prefetch_related('genres').filter(imdb_rating__gte=search_rating)
+                    queryset = queryset.filter(imdb_rating__gte=search_rating)
                 else:
                     return Response({'message': 'No movies above this rating exists in the database'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             if search_popularity:
                 if queryset.filter(movie_popularity__gte=search_popularity).count() > 0:
-                    queryset = queryset.prefetch_related('genres').filter(movie_popularity__gte=search_popularity)
+                    queryset = queryset.filter(movie_popularity__gte=search_popularity)
                 else:
                     return Response({'message': 'No movies above this popularity exists in the database'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
 
             if search_genre:
                 if queryset.filter(genres__genre_name__iexact=search_genre).count() > 0:
-                    queryset = queryset.prefetch_related('genres').filter(genres__genre_name__iexact=search_genre)
+                    queryset = queryset.filter(genres__genre_name__iexact=search_genre)
                 else:
                     return Response({'message': 'No data exists for this Genre'},
                                     status=rest_framework.status.HTTP_400_BAD_REQUEST)
