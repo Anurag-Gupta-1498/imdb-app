@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import MovieGenre, MovieDetails
 from django.core.exceptions import ValidationError
 
+
 class MovieGenreSerializer(serializers.ModelSerializer):
     """
     Serializer for genre model
@@ -34,6 +35,9 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
 
 class ValidationSerializer(serializers.Serializer):
+    """
+    Serializer for validating get request parameters of search api
+    """
     page = serializers.IntegerField(default=1)
     search_name = serializers.CharField(default=None)
     search_director = serializers.CharField(default=None)
