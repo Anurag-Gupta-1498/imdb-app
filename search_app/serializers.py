@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import MovieGenre, MovieDetails
-
+from django.core.exceptions import ValidationError
 
 class MovieGenreSerializer(serializers.ModelSerializer):
     """
@@ -31,3 +31,14 @@ class MovieDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovieDetails
         fields = ['movie_name', 'director', 'movie_popularity', 'imdb_rating', 'genres']
+
+
+class ValidationSerializer(serializers.Serializer):
+    page = serializers.IntegerField(default=1)
+    search_name = serializers.CharField(default=None)
+    search_director = serializers.CharField(default=None)
+    search_rating = serializers.IntegerField(default=None)
+    search_popularity = serializers.IntegerField(default=None)
+    search_genre = serializers.CharField(default=None)
+    paginator_len = serializers.IntegerField(default=10)
+    paginator_req = serializers.ChoiceField(default='yes', choices=(('yes', 'yes'), ('no', 'no')))
